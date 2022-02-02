@@ -8,6 +8,10 @@ namespace Gruppuppgift
 {
     class Player: GameObject
     {
+        public Player()
+        {
+
+        }
         enum Riktning
         {
            Down,

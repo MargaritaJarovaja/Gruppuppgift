@@ -7,10 +7,13 @@ namespace Gruppuppgift
 {
     class Food:GameObject
     {
+        public Food()
+        {
 
+        }
         protected override void Update()
         {
-            Console.WriteLine("Hejo!");
+           
         }
 
 
