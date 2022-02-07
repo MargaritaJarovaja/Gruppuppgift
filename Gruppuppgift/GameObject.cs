@@ -10,10 +10,12 @@ namespace Gruppuppgift
     {
         // TODO
         Position position = new Position();
-        char appearance;
+        //char appearance;
         
 
         protected abstract void Update();
+
+        //protected abstract void ConsoleRender();
         
     }
 }

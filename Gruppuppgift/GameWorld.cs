@@ -8,17 +8,43 @@ namespace Gruppuppgift
 {
     class GameWorld
     {
-        public static int Width { get; } = 26;
-        public static int Height { get; } = 26;
-        int score;
+       public int Width { get; set; }
+       public int Height { get; set; }
+
+         public GameWorld()
+         {
+            Width = 100;
+            Height = 30;
+         }       
+        
         List<GameObject> Games = new List<GameObject>();
-        public void Update()
+
+        public void UpdateBoard()
         {
-            // TODO
-            foreach (var game in Games)
+           for (int i = 0; i < Width; i++)
+           {
+                Console.SetCursorPosition(i, 0);
+                Console.WriteLine("-");
+           }
+
+            for (int i = 0; i < Width; i++)
             {
-                Console.WriteLine(game);
+                Console.SetCursorPosition(i, Height);
+                Console.WriteLine("-");
             }
+
+            for (int i = 0; i < Height; i++)
+            {
+                Console.SetCursorPosition(0, i);
+                Console.WriteLine("|");
+            }
+
+            for (int i = 0; i < Height; i++)
+            {
+                Console.SetCursorPosition(Width, i);
+                Console.WriteLine("|");
+            }
+            
         }
     }
 }
