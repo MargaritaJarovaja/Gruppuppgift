@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 
 namespace Gruppuppgift
 {
+    /// <summary>
+    /// En abstrakt klass som definierar beteendet för alla klasser som ärvts från den
+    /// </summary>
     abstract class GameObject
-    {
-        // TODO
+    {       
         Position position = new Position();
         //char appearance;
-        
+        public int x { get; set; }
+        public int y { get; set; }
 
-        protected abstract void Update();
-
-        //protected abstract void ConsoleRender();
+        protected abstract void Update();       
         
     }
 }

@@ -7,18 +7,24 @@ using System.Threading.Tasks;
 
 namespace Gruppuppgift
 {
-    class Player: GameObject
+    /// <summary>
+    /// Klass ärvt från abstrakt klass GameObject
+    /// </summary>
+    class Player : GameObject
     {
         ConsoleKeyInfo keyInfo = new ConsoleKeyInfo();
-        char key = 'w';
-        char dir = 'u';
+        char key = 'w'; //variabel för nedtryckt knapp
+        char dir = 'u'; //variabel för riktning
 
-        public List<Position> snakeBody { get; set; }
+        public List<Position> snakeBody { get; set; } //lista över alla ormkroppsdelar
 
         public int x { get; set; }
         public int y { get; set; }
         public int score { get; set; }
 
+        /// <summary>
+        /// Klasskonstruktör
+        /// </summary>
         public Player()
         {
             x = 20;
@@ -32,9 +38,9 @@ namespace Gruppuppgift
             snakeBody.Add(new Position(x, y));
         }
 
-
-              
-
+        /// <summary>
+        /// Metoden som implementerar visualiseringen av objektet på spelplanen
+        /// </summary>
         protected override void Update()
         {
             foreach (Position pos in snakeBody)
@@ -44,32 +50,22 @@ namespace Gruppuppgift
                 Console.SetCursorPosition(pos.x, pos.y);
                 Console.Write("■");
                 Console.ForegroundColor = ConsoleColor.White;
-                GameWorld gameWorld = new GameWorld();
-                HitWall(gameWorld);               
+                GameWorld gameWorld = new GameWorld();                             
             }
          
         }
 
+        /// <summary>
+        /// En metod som låter använda resultatet av smetoden Update();
+        /// </summary>
         public void GetUpdates()
         {
             Update();
         }
 
-        //protected override void ConsoleRender()
-        //{
-        //    foreach (Position pos in snakeBody)
-        //    {
-        //        Console.SetCursorPosition(pos.x, pos.y);
-        //        Console.Write("H");
-        //    }
-
-        //}
-
-        //public void GetConsoleRender()
-        //{
-        //    ConsoleRender();
-        //}
-
+        /// <summary>
+        /// Metod för att acceptera information som angetts av användaren
+        /// </summary>
         public void Input()
         {
             if (Console.KeyAvailable == true)
@@ -79,6 +75,10 @@ namespace Gruppuppgift
             }
         }
 
+        /// <summary>
+        /// Bestämning av ormens rörelseriktning baserat på knappen som
+        /// användaren trycker på
+        /// </summary>
         public void Direction()
         {
             if (key == 'w' && dir != 'd')
@@ -99,6 +99,9 @@ namespace Gruppuppgift
             }
         }
 
+        /// <summary>
+        /// Implementering av rörelse i en given riktning
+        /// </summary>
         public void MoveSnake()
         {
             Direction();
@@ -121,11 +124,17 @@ namespace Gruppuppgift
             }
 
             snakeBody.Add(new Position(x, y));
-            snakeBody.RemoveAt(0);            
+            snakeBody.RemoveAt(0);      //Ta bort positionen som ormens kropp har lämnat      
             Thread.Sleep(100);            
             Console.Clear();
         }
 
+        /// <summary>
+        /// En metod som avgör om ormens och food positioner på spelplanen matchar, 
+        /// och i så fall tas objekt food bort och ett nytt skapas på en annan plats
+        /// </summary>
+        /// <param name="food"> food objektets position på fältet</param>
+        /// <param name="f">food objektet</param>
         public void Eat(Position food, Food f)
         {
             Position head = snakeBody[snakeBody.Count - 1];
@@ -133,10 +142,16 @@ namespace Gruppuppgift
             {
                 snakeBody.Add(new Position(x, y));
                 f.FoodNewLocation();
-                score++;
+                score++;    //Lägga till poäng för det uppätna objektet food
             }
         }
 
+        /// <summary>
+        /// Metoden som kontrollerar om ormen har gått utanför spelplanen.
+        /// Metoden avslutar även spelet om ormens position sammanfaller 
+        /// med plangränsens koordinater.
+        /// </summary>
+        /// <param name="gameWorld">spelimplementeringsobjekt</param>
         public void HitWall(GameWorld gameWorld)
         {            
             Position head = snakeBody[snakeBody.Count - 1];

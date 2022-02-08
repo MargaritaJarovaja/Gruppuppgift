@@ -6,6 +6,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using static System.Console;
 
+//Programmet implementerar följande:
+//skapande av spelplansobjektet och dess visualisering,
+//skapa ett ormobjekt som rör sig i en användarspecificerad riktning, 
+//hamnar i en position med ett matobjekt, äter upp det, får en poäng för det och ökar i storlek.
+//När du träffar väggen på planen tar spelet slut. 
+//I början av spelet dyker en liten meny upp med möjlighet att spela och avsluta programmet. 
+//Under spelets gång syns poängen som användaren tjänar på planen. 
+//Efter att ha förlorat informeras användaren om att spelet är över 
+//och det totala antalet poäng för spelet, varefter programmet stänger.
+//Visualiseringen av vart och ett av objekten sker i motsvarande klass och inte i en separat klass.
+//Programmet fungerar en gång tills användaren lämnar spelplanen, det finns inga begränsningar
+//för poäng i spelet.
+
 namespace Gruppuppgift
 {
     class Program
@@ -15,7 +28,10 @@ namespace Gruppuppgift
         /// </summary>
         static ConsoleKey ReadKeyIfExists() => Console.KeyAvailable ? Console.ReadKey(intercept: true).Key : ConsoleKey.NoName;
 
-        static  void Menu()
+        /// <summary>
+        /// En metod som erbjuder användaren en alternativ handling.
+        /// </summary>
+        static void Menu()
         {
             ConsoleKeyInfo keyInfo = new ConsoleKeyInfo();
             ConsoleKey consoleKey = new ConsoleKey();           
@@ -24,7 +40,11 @@ namespace Gruppuppgift
             Console.ForegroundColor = ConsoleColor.White;            
             Console.WriteLine("\n\n\n\n\t\t\t\t\t\t- Press 1 to start game");           
             Console.WriteLine("\n\t\t\t\t\t\t- Press Esc to quit a game");
-       
+            Console.WriteLine("\n\n\n\n\t\t\t\t\t\t\tW - to go UP");
+            Console.WriteLine("\n\t\t\t\t\t\t\tS - to go DOWN");
+            Console.WriteLine("\n\t\t\t\t\t\t\tD - to go RIGHT");
+            Console.WriteLine("\n\t\t\t\t\t\t\tA - to go LEFT");
+
             keyInfo = Console.ReadKey(true);
             consoleKey = keyInfo.Key;
 
@@ -39,95 +59,50 @@ namespace Gruppuppgift
             }
         }
 
-        //static void Loop()
-        //{
-        //    // Initialisera spelet
-        //    //const int frameRate = 5;
-        //    //int Width = 26;
-        //    //int Height = 26;
-        //    //GameWorld world = new GameWorld(Width, Height);
-        //    //ConsoleRenderer renderer = new ConsoleRenderer(world);
-
-        //    Player player = new Player();
-
-        //    // TODO Skapa spelare och andra objekt etc. genom korrekta anrop till vår GameWorld-instans
-        //    // ...
-
-        //    // Huvudloopen
-        //    bool running = true;
-        //    while (running)
-        //    {
-        //        // Kom ihåg vad klockan var i början
-        //        DateTime before = DateTime.Now;
-
-        //        // Hantera knapptryckningar från användaren
-        //        ConsoleKey key = ReadKeyIfExists();
-        //        switch (key)
-        //        {
-        //            case ConsoleKey.Q:
-        //                running = false;
-        //                break;
-
-        //            case ConsoleKey.W:
-        //                running = true;
-        //                break;
-
-
-        //                // TODO Lägg till logik för andra knapptryckningar
-        //                // ...
-        //        }
-
-                // Uppdatera världen och rendera om
-               // world.Update();
-               // renderer.Render();
-
-                // Mät hur lång tid det tog
-               // double frameTime = Math.Ceiling((1000.0 / frameRate) - (DateTime.Now - before).TotalMilliseconds);
-                //if (frameTime > 0)
-                //{
-                //    // Vänta rätt antal millisekunder innan loopens nästa varv
-                //    Thread.Sleep((int)frameTime);
-        //        //}
-        //    }
-        //}
-
-        static void Main(string[] args)
+        static void Loop()
         {
-
             bool finished = false;
-
+            const int frameRate = 5;
             GameWorld game = new GameWorld();
             Player player = new Player();
             Food food = new Food();
-           
-            Menu();
-            DateTime before = DateTime.Now;        
 
+            Menu();
+            DateTime before = DateTime.Now;
+            
             while (!finished)
             {
                 game.UpdateBoard();
                 Console.SetCursorPosition(90, 5);
                 Console.Write("SCORE: {0}", player.score);
                 player.Input();
-                food.GetUpdates();              
+                food.GetUpdates();
                 player.GetUpdates();
                 player.MoveSnake();
-                player.Eat(food.FoodLocation(), food);                
+                player.Eat(food.FoodLocation(), food);
                 player.HitWall(game);
                 if (finished)
                 {
                     DateTime finish = DateTime.Now;
                     TimeSpan result = finish - before;
                     Console.WriteLine($"\n\t\t\t\t\t\tYour time is: {result.Hours} hours, {result.Minutes} minutes, {result.Seconds} seconds");
-                  
+
                 }
-               
-            }            
-            //DateTime finish = DateTime.Now;
-           // TimeSpan result = finish - before;
-           // Console.WriteLine($"\n\t\t\t\t\t\tYour time is: {result.Hours} hours, {result.Minutes} minutes, {result.Seconds} seconds");
+
+            }
+            double frameTime = Math.Ceiling((1000.0 / frameRate) - (DateTime.Now - before).TotalMilliseconds);
+            if (frameTime > 0)
+            {
+                // Vänta rätt antal millisekunder innan loopens nästa varv
+                Thread.Sleep((int)frameTime);
+            }
             Console.ReadKey();
             Environment.Exit(0);
+        }
+
+        static void Main(string[] args)
+        {
+            Loop();           
         }
     }
 }

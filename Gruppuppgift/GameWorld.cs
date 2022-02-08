@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Gruppuppgift
 {
+    /// <summary>
+    /// En klass för att skapa ett spel och rita en spelplan.
+    /// </summary>
     class GameWorld
     {
        public int Width { get; set; }
@@ -19,6 +22,9 @@ namespace Gruppuppgift
         
         List<GameObject> Games = new List<GameObject>();
 
+        /// <summary>
+        /// Visualisering av spelfält
+        /// </summary>
         public void UpdateBoard()
         {
            for (int i = 0; i < Width; i++)
